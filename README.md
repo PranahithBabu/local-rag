@@ -49,10 +49,10 @@ Follow these steps to run the app on your local machine:
 4. Download Ollama from https://ollama.com/download
 
 5. Run below commands to get the model for this project;
-```
+    ```
     ollama pull qwen3:8b
     ollama run qwen3:8b
-```
+    ```
 
 6. Enter `ollama serve` in a new terminal to run the model.
 
