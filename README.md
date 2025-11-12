@@ -46,6 +46,18 @@ Follow these steps to run the app on your local machine:
 
     <i>Remove content inside <b>chromadb and data</b> folder to avoid default PDF's.  </i>
 
-4. Run the application ```python app.py```
+4. Download Ollama from https://ollama.com/download
 
-5. Follow the terminal for step-by-step logs and response to given query.
+5. Run below commands to get the model for this project;
+```
+    ollama pull qwen3:8b
+    ollama run qwen3:8b
+```
+
+6. Enter `ollama serve` in a new terminal to run the model.
+
+    <i>Note: If port 11434 issue occurs, then it means, the ollama is already running in the background on the same port, and you can avoid this command to start the server.</i>
+
+7. Run the application ```python app.py```
+
+8. Follow the terminal for step-by-step logs and response to given query.
