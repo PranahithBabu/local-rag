@@ -15,10 +15,11 @@ The system extracts text from uploaded documents, generates embeddings, stores t
 ## 🧩 Tech Stack
 Layer | Technology
 --- | ---
+Frontend | Streamlit
 Backend | Python
 Vector DB |	ChromaDB
-Embeddings | SentenceTransformers
-LLM | Ollama QWEN3
+Embeddings | nomic-embed-test
+LLM | Ollama QWEN3 8B / Gemma3 1B
 
 ## 🛠️ Local Setup Instructions
 
@@ -43,21 +44,38 @@ Follow these steps to run the app on your local machine:
     ```
     pip install -r requirements.txt
     ```
-
-    <i>Remove content inside <b>chromadb and data</b> folder to avoid default PDF's.  </i>
+    <i>Remove content inside <b>chromadb and data</b> folder to avoid default PDF's.</i>
 
 4. Download Ollama from https://ollama.com/download
 
-5. Run below commands to get the model for this project;
-    ```
-    ollama pull qwen3:8b
-    ollama run qwen3:8b
-    ```
+5. Important ollama commands for this project;
+    - To download a specific model:
+        ```
+        ollama pull qwen3:8b
+        ollama pull gemma3:1b
+        ```
+    - To test a model:
+        ```
+        ollama run qwen3:8b
+        ollama run gemma3:1b
+        ```
+    - To view downloaded models:
+        ```
+        ollama list
+        ```
 
 6. Enter `ollama serve` in a new terminal to run the model.
 
     <i>Note: If port 11434 issue occurs, then it means, the ollama is already running in the background on the same port, and you can avoid this command to start the server.</i>
 
-7. Run the application ```python app.py```
+7. Run the application:
+    - Terminal level execution
+        ```
+        python app.py
+        ```
+    - UI level execution
+        ```
+        streamlit run app_streamlit.py
+        ```
 
 8. Follow the terminal for step-by-step logs and response to given query.

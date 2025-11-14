@@ -8,3 +8,4 @@ pypdf
 python-dotenv 
 unstructured[pdf]
 tiktoken
+streamlit

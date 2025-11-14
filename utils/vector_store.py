@@ -1,6 +1,14 @@
+import os
+import shutil
 from langchain_community.vectorstores import Chroma
 
-CHROMA_PATH = "chroma_db" # Directory to store ChromaDB data
+# Directory to store ChromaDB data
+CHROMA_PATH = "chroma_db"
+DB_FILE = os.path.join(CHROMA_PATH, "chroma.sqlite3")
+
+def db_exists():
+    """Checks if the ChromaDB file already exists."""
+    return os.path.exists(DB_FILE)
 
 def get_vector_store(embedding_function, persist_directory=CHROMA_PATH):
     """Initializes or loads the Chroma vector store."""
@@ -12,16 +20,23 @@ def get_vector_store(embedding_function, persist_directory=CHROMA_PATH):
     return vectorstore
 
 def index_documents(chunks, embedding_function, persist_directory=CHROMA_PATH):
-    """Indexes document chunks into the Chroma vector store."""
+    """
+    Clears the old vector store and indexes new document chunks.
+    """
+    # 1. Clear the existing directory
+    if os.path.exists(persist_directory):
+        print(f"Clearing existing vector store at: {persist_directory}")
+        shutil.rmtree(persist_directory)
+    
+    # 2. Create a new vector store from documents
     print(f"Indexing {len(chunks)} chunks...")
-    # Use from_documents for initial creation.
-    # This will overwrite existing data if the directory exists but isn't a valid Chroma DB.
-    # For incremental updates, initialize Chroma first and use vectorstore.add_documents().
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embedding_function,
         persist_directory=persist_directory
     )
-    vectorstore.persist() # Ensure data is saved
+    
+    # 3. Persist the new data
+    vectorstore.persist()
     print(f"Indexing complete. Data saved to: {persist_directory}")
     return vectorstore

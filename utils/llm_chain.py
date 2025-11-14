@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-def create_rag_chain(vector_store, llm_model_name="qwen3:8b", context_window=8192):
+def create_rag_chain(vector_store, llm_model_name="gemma3:1b", context_window=8192):
     """Creates the RAG chain."""
     llm = ChatOllama(
         model=llm_model_name,
