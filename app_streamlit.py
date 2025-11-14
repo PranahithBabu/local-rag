@@ -73,6 +73,20 @@ HEADER_HTML = f"""
 """
 st.markdown(HEADER_HTML, unsafe_allow_html=True)
 
+# Cached function to build the RAG Chain
+@st.cache_resource
+def get_cached_rag_chain():
+    """
+    Initializes and caches the RAG chain.
+    This function will only run once per session or if the cache is cleared.
+    """
+    print("--- (Cache) Creating new RAG chain ---")
+    embedding_function = get_embedding_function()
+    vector_store = get_vector_store(embedding_function)
+    rag_chain = create_rag_chain(vector_store)
+    print("--- (Cache) RAG chain created and cached ---")
+    return rag_chain
+
 # Session State Initialization
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -118,6 +132,9 @@ with st.sidebar:
                     st.info("Indexing documents (this will clear the old index)...")
                     index_documents(chunks, embedding_function)
                     
+                    # --- 2. NEW: Clear the cache after re-indexing ---
+                    st.cache_resource.clear()
+
                     st.session_state.db_ready = True
                     st.success("✅ Documents processed successfully!")
                 
@@ -155,9 +172,13 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("🧠 Thinking..."):
                 try:
-                    embedding_function = get_embedding_function()
-                    vector_store = get_vector_store(embedding_function)
-                    rag_chain = create_rag_chain(vector_store)
+
+                    # Get chain from cache
+                    rag_chain = get_cached_rag_chain()
+                    
+                    # embedding_function = get_embedding_function()
+                    # vector_store = get_vector_store(embedding_function)
+                    # rag_chain = create_rag_chain(vector_store)
                     
                     # Get response
                     response = query_rag(rag_chain, question)
